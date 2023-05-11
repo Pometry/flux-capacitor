@@ -1,7 +1,8 @@
+use crate::data::Metadata;
 use crate::model::QueryRoot;
 use crate::observability::metrics::{create_prometheus_recorder, track_metrics};
 use crate::observability::tracing::create_tracer_from_env;
-use crate::routes::{graphql_playground, health, graphql_handler};
+use crate::routes::{graphql_handler, graphql_playground, health};
 use async_graphql::{EmptyMutation, EmptySubscription, Schema};
 use axum::{extract::Extension, middleware, routing::get, Router, Server};
 use dotenv::dotenv;
@@ -12,6 +13,7 @@ use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::Registry;
 
+mod data;
 mod model;
 mod observability;
 mod routes;
@@ -46,7 +48,9 @@ async fn shutdown_signal() {
 async fn main() {
     dotenv().ok();
 
-    let schema = Schema::build(QueryRoot, EmptyMutation, EmptySubscription).finish();
+    let schema = Schema::build(QueryRoot, EmptyMutation, EmptySubscription)
+        .data(Metadata::lotr())
+        .finish();
 
     let prometheus_recorder = create_prometheus_recorder();
 
