@@ -30,8 +30,8 @@ pub(crate) async fn graphql_playground() -> impl IntoResponse {
 }
 
 pub(crate) async fn graphql_handler(
-    req: GraphQLRequest,
     Extension(schema): Extension<ServiceSchema>,
+    req: GraphQLRequest,
 ) -> GraphQLResponse {
     let span = span!(Level::INFO, "graphql_execution");
 

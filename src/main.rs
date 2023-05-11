@@ -1,7 +1,7 @@
 use crate::model::QueryRoot;
 use crate::observability::metrics::{create_prometheus_recorder, track_metrics};
 use crate::observability::tracing::create_tracer_from_env;
-use crate::routes::{graphql_handler, graphql_playground, health};
+use crate::routes::{graphql_playground, health, graphql_handler};
 use async_graphql::{EmptyMutation, EmptySubscription, Schema};
 use axum::{extract::Extension, middleware, routing::get, Router, Server};
 use dotenv::dotenv;
